@@ -16,7 +16,7 @@
 
 
 //放到main.c不行
-#define test            01					//测试时选1（仅main.c生效）
+#define test            0					//测试时选1（仅main.c生效）
 #define ZIQUDIAN		0					//自取电探头选1（发射功率为20dBm，已加至预处理）
 #define BATTERY        	0					//电池探头选1（发射功率为2dBm，已加至预处理）
 #define KAIGUAN         01					//开关柜探头选1（发射功率为8dBm，已加至预处理）

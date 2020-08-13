@@ -95,7 +95,7 @@
         <Bp2>_ "STD_CODE" "{$PROJ_DIR$}.241.13" 0 0 0 0 "" 0 ""</Bp2>
         <Bp3>_ "STD_CODE" "{$PROJ_DIR$}.293.13" 0 0 0 0 "" 0 ""</Bp3>
         <Bp4>_ "STD_CODE" "{$PROJ_DIR$}.336.13" 0 0 0 0 "" 0 ""</Bp4>
-        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\main.c}.336.8" 0 0 0 0 "" 0 ""</Bp5>
+        <Bp5>_ "STD_CODE" "{$PROJ_DIR$\main.c}.337.3" 0 0 0 0 "" 0 ""</Bp5>
         <Count>6</Count>
     </Breakpoints>
     <Aliases>

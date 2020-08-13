@@ -8,19 +8,19 @@ unsigned char	SpreadingFactor = 7;  				//7-12,扩频因子小些，发送时间快
 unsigned char	CodingRate = 2;        				//1-4  误码率
 unsigned char	Bw_Frequency = 8;      				//6-9  8带宽250k
 unsigned char	PowerValue = 14;    				//开关柜探头	发射功率14dBm
-unsigned char	ReamLength = 20;    				//前导码长度--->>20
-unsigned int	Timeout = 4;						//单次接收检测超时时间	4symbols
+unsigned char	ReamLength = 21	;    				//前导码长度--->>5
+unsigned int	Timeout = 0x05;						//单次接收检测超时时间	4symbols
 BOOL_t			Low_Datarate = Fl; 			 		//低数据优化	关
 
 #elif BATTERY
-unsigned char	Frequency[3] = {0x6c,0x80,0x00};	//设置频率434M
-unsigned char	SpreadingFactor = 9;  				//7-12,扩频因子小些，发送时间快
+unsigned char	Frequency[3] = {0x77,0x40,0x14};	//设置频率477M
+unsigned char	SpreadingFactor = 7;  				//7-12,扩频因子小些，发送时间快
 unsigned char	CodingRate = 2;        				//1-4  误码率
-unsigned char	Bw_Frequency = 7;      				//6-9  7带宽125k
-unsigned char	PowerValue = 0;    					//电池探头		发射功率0dBm 2dBm?
-unsigned char	ReamLength = 48;    				//前导码长度48
-unsigned int	Timeout = 5;						//单次接收检测超时时间
-BOOL_t			Low_Datarate = Tr; 			 		//低数据优化	开
+unsigned char	Bw_Frequency = 8;      				//6-9  8带宽250k
+unsigned char	PowerValue = 14;    				//开关柜探头	发射功率14dBm
+unsigned char	ReamLength = 21	;    				//前导码长度--->>5
+unsigned int	Timeout = 0x05;						//单次接收检测超时时间	4symbols
+BOOL_t			Low_Datarate = Fl; 			 		//低数据优化	关
 
 #elif KAIGUAN
 unsigned char	Frequency[3] = {0x77,0x40,0x14};	//设置频率477M
@@ -29,7 +29,7 @@ unsigned char	CodingRate = 2;        				//1-4  误码率
 unsigned char	Bw_Frequency = 8;      				//6-9  8带宽250k
 unsigned char	PowerValue = 14;    				//开关柜探头	发射功率14dBm
 unsigned char	ReamLength = 0x05;    				//前导码长度--->>5
-unsigned int	Timeout = 4;						//单次接收检测超时时间	4symbols
+unsigned int	Timeout = 0x04;						//单次接收检测超时时间	4symbols
 BOOL_t			Low_Datarate = Fl; 			 		//低数据优化	关
 
 #elif ZIQUDIAN
@@ -38,8 +38,8 @@ unsigned char	SpreadingFactor = 9;  		 		//7-12,扩频因子小些，发送时间快
 unsigned char	CodingRate = 2;        		 		//1-4  误码率
 unsigned char	Bw_Frequency = 7;      		 		//6-9  7带宽125k
 unsigned char	PowerValue = 15;    			 	//自取电探头	发射功率20dBm     第16个，0xcf
-unsigned char	ReamLength = 48;    		 		//前导码长度48
-unsigned int	Timeout = 5;				 		//单次接收检测超时时间
+unsigned char	ReamLength = 0x30;    		 		//前导码长度48
+unsigned int	Timeout = 0x05;				 		//单次接收检测超时时间
 BOOL_t			Low_Datarate = Tr; 			 		//低数据优化	开
 #endif
 
@@ -85,7 +85,7 @@ void RF_Initial(void)
 说明：写命令
 入参：Cmd  命令
 出参：
-*****************************************************************/
+*************************************************************************/
 void RF_WriteCmd(unsigned char Cmd)
 {
 	 RF_CSN_LOW( );												//片选使能
@@ -93,12 +93,12 @@ void RF_WriteCmd(unsigned char Cmd)
 	 RF_CSN_HIGH( );											//片选释放
 }
 
-/*****************************************************************
+/************************************************************************
 函数：void RF_ReadMultiReg(unsigned char addr,unsigned char *buf,unsigned char size)
 说明：向寄存器地址读数据
 入参：addr  寄存器地址   buf  数据   size数据长度
 出参：
-*****************************************************************/
+*************************************************************************/
 void RF_ReadMultiReg(unsigned char addr,unsigned char *buf,unsigned char size)
 {
     unsigned char i;
@@ -111,12 +111,13 @@ void RF_ReadMultiReg(unsigned char addr,unsigned char *buf,unsigned char size)
     }
     RF_CSN_HIGH( );
 }
-/*****************************************************************
+
+/************************************************************************
 函数：void RF_ReadMultiReg(unsigned char addr,unsigned char *buf,unsigned char size)
 说明：向寄存器地址写数据
 入参：addr  寄存器地址   buf  数据   size数据长度
 出参：
-*****************************************************************/
+*************************************************************************/
 void RF_WriteMultiReg( unsigned char addr, unsigned char *buff, unsigned char size )
 {
     unsigned char i;
@@ -130,12 +131,12 @@ void RF_WriteMultiReg( unsigned char addr, unsigned char *buff, unsigned char si
     RF_CSN_HIGH( );
 }
 
-/*****************************************************************
+/************************************************************************
 函数：void SX1276Reset(void)
 说明：复位SX1278
 入参：
 出参：
-*****************************************************************/
+*************************************************************************/
 void SX1276Reset(void)
 {
   	GPIO_Init(Reset_Port, Reset_Pin, GPIO_Mode_Out_OD_HiZ_Slow);	//已测试可拉低
@@ -155,12 +156,12 @@ void FSK_SEND_PACKET(void)
 }
 #endif
 
-/*****************************************************************
+/************************************************************************
 函数：void SX1276WriteBuffer( unsigned char addr, unsigned char value )
 说明：写寄存器数据
 入参：addr  寄存器地址  value  写入值
 出参：
-*****************************************************************/
+*************************************************************************/
 void SX1276WriteBuffer( unsigned char addr, unsigned char value )
 {
     RF_CSN_LOW( );
@@ -169,12 +170,13 @@ void SX1276WriteBuffer( unsigned char addr, unsigned char value )
 
     RF_CSN_HIGH( );
 }
-/*****************************************************************
+
+/************************************************************************
 函数：unsigned char SX1276ReadBuffer( unsigned char addr )
 说明：读寄存器地址值
 入参：addr  地址
 出参：读取的值
-*****************************************************************/
+*************************************************************************/
 unsigned char SX1276ReadBuffer( unsigned char addr )
 {
     unsigned char i = 0;
@@ -185,12 +187,12 @@ unsigned char SX1276ReadBuffer( unsigned char addr )
     return i;
 }
 
-/******************************************************************************
+/************************************************************************
 函数：void SX1276LoRaSetOpMode( RFMode_SET opMode )
 说明：设置SX1278工作方式。通过变更RegOpMode寄存器的值，可以从任意一种模式切换到另一种模式
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetOpMode( RFMode_SET opMode )
 {
 	unsigned char opModePrev;
@@ -199,12 +201,13 @@ void SX1276LoRaSetOpMode( RFMode_SET opMode )
 	opModePrev |= (unsigned char)opMode;				//或上形参
 	SX1276WriteBuffer( REG_LR_OPMODE, opModePrev);		//重新写回去
 }
-/******************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaFsk( Debugging_fsk_ook opMode )
 说明：设置SX11278工作模式
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaFsk( Debugging_fsk_ook opMode )
 {
 	unsigned char opModePrev;
@@ -213,12 +216,13 @@ void SX1276LoRaFsk( Debugging_fsk_ook opMode )
 	opModePrev |= (unsigned char)opMode;				//或上形参
 	SX1276WriteBuffer( REG_LR_OPMODE, opModePrev);		//重新写回去
 }
-/*****************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaSetRFFrequency(void)
 说明：设置工作频率
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetRFFrequency(void)
 {
 	SX1276WriteBuffer( REG_LR_FRFMSB, Frequency[0]);  //0x06寄存器
@@ -226,12 +230,12 @@ void SX1276LoRaSetRFFrequency(void)
 	SX1276WriteBuffer( REG_LR_FRFLSB, Frequency[2]);  //0x08寄存器
 }
 
-/*******************************************************************************
+/************************************************************************
 函数：void SX1276LoRaSetRFPower(unsigned char power )
 说明：设置功率
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetRFPower(unsigned char power )
 {
 	//Set Pmax to +20dBm for PA_HP, Must turn off PA_LF or PA_HF, and set RegOcp
@@ -242,12 +246,12 @@ void SX1276LoRaSetRFPower(unsigned char power )
 	SX1276WriteBuffer( REG_LR_PACONFIG,  power_data[power] );
 }
 
-/*******************************************************************************
+/************************************************************************
 函数：void SX1276LoRaSetSpreadingFactor(unsigned char factor )
 说明：设置扩频因子
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetSpreadingFactor(unsigned char factor )
 {
 	unsigned char RECVER_DAT;
@@ -273,12 +277,13 @@ void SX1276LoRaSetErrorCoding(unsigned char value )
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG1, RECVER_DAT);
 	// LoRaSettings.ErrorCoding = value;
 }
-/***************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaSetPacketCrcOn(BOOL_t enable )
 说明：CRC校正
 入参:
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetPacketCrcOn(BOOL_t enable )
 {
 	unsigned char RECVER_DAT;
@@ -286,12 +291,13 @@ void SX1276LoRaSetPacketCrcOn(BOOL_t enable )
 	RECVER_DAT = ( RECVER_DAT & RFLR_MODEMCONFIG2_RXPAYLOADCRC_MASK ) | ( enable << 2 );
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG2, RECVER_DAT );
 }
-/********************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaSetSignalBandwidth(unsigned char bw )
 说明：设置带宽
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetSignalBandwidth(unsigned char bw )
 {
 	unsigned char RECVER_DAT;
@@ -300,12 +306,13 @@ void SX1276LoRaSetSignalBandwidth(unsigned char bw )
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG1, RECVER_DAT );
 	// LoRaSettings.SignalBw = bw;
 }
-/********************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaSetImplicitHeaderOn(BOOL_t enable )
 说明：显隐性
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetImplicitHeaderOn(BOOL_t enable )
 {
 	unsigned char RECVER_DAT;
@@ -313,12 +320,12 @@ void SX1276LoRaSetImplicitHeaderOn(BOOL_t enable )
 	RECVER_DAT = ( RECVER_DAT & RFLR_MODEMCONFIG1_IMPLICITHEADER_MASK ) | ( enable );	//计算&0xFE|enable，由于|运算，enable值会生效
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG1, RECVER_DAT );
 }
-/********************************************************************************
+/************************************************************************
 函数：void SX1276LoRaSetSymbTimeout(unsigned int value )
 说明：接收超时时间
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetSymbTimeout(unsigned int value )
 {
 	unsigned char RECVER_DAT[2];
@@ -329,24 +336,25 @@ void SX1276LoRaSetSymbTimeout(unsigned int value )
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG2, RECVER_DAT[0]);
 	SX1276WriteBuffer( REG_LR_SYMBTIMEOUTLSB, RECVER_DAT[1]);
 }
-/********************************************************************************
+
+/************************************************************************
 函数：void SX1276LoRaSetPayloadLength(unsigned char value )
 说明：设置接收长度
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetPayloadLength(unsigned char value )
 {
 	SX1276WriteBuffer( REG_LR_PAYLOADLENGTH, value );  //写0x22寄存器，playload长度
 }
 
 #if 1
-/********************************************************************************
+/************************************************************************
 函数：void SX1276LoRaSetPreamLength(unsigned int value )
 说明：前导码位数
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void SX1276LoRaSetPreamLength(unsigned int value )
 {
 	unsigned char a[2];
@@ -364,12 +372,13 @@ void SX1276LoRaSetMobileNode(BOOL_t enable )
 	RECVER_DAT = ( RECVER_DAT & RFLR_MODEMCONFIG3_MOBILE_NODE_MASK ) | ( enable << 3 );
 	SX1276WriteBuffer( REG_LR_MODEMCONFIG3, RECVER_DAT );
 }
-/**************************************************************
+
+/************************************************************************
 函数：void FUN_RF_SENDPACKET(unsigned char *RF_TRAN_P,unsigned char LEN)
 说明：发送数据，最多255字节
 入参：
 出参：
-******************************************************************************/
+*************************************************************************/
 void FUN_RF_SENDPACKET(unsigned char *RF_TRAN_P,unsigned char LEN)
 {
   	SX1276WriteBuffer(REG_LR_IRQFLAGSMASK, IRQN_TXD_Value );	//可选IRQ标志屏蔽
@@ -382,12 +391,12 @@ void FUN_RF_SENDPACKET(unsigned char *RF_TRAN_P,unsigned char LEN)
 }
 
 //杜颖成=====================开始
-/**********************************************************************
+/************************************************************************
 函数：unsigned char SX1278_TX(unsigned char *buf,unsigned int time,unsigned char len)
 功能：SX1278进行CAD检测，空闲时以当前配置启动发射，最多time秒；信道忙时延时约0.9S。完成后进入Sleep_mode。
 入参：unsigned char *buf，发射数据存放地址；unsigned int time，发射超时时间，单位ms；unsigned char len，发送的字节数
 出参：发射完成，返回1；信道忙未发射，返回0；发射超时未完成，返回0xff
-***********************************************************************/
+*************************************************************************/
 unsigned char SX1278_TX(unsigned char *buf,unsigned int time,unsigned char len)
 {
 	RF_CAD_RECEIVE();									//CAD配置
@@ -410,12 +419,12 @@ unsigned char SX1278_TX(unsigned char *buf,unsigned int time,unsigned char len)
 	}
 }
 
-/**********************************************************************
+/************************************************************************
 函数：unsigned char SX1278_RX(unsigned char *buf,unsigned int time,unsigned char *rssi)
 功能：SX1278以当前配置开启接收（FIFO指针0x00），最多time秒，接收完后进入Sleep_mode。
 入参：unsigned char *buf，接收数据存放地址；unsigned int time，接收超时时间，单位ms
 出参：接收完成，返回接收到的数据长度；超时未完成，返回0
-***********************************************************************/
+*************************************************************************/
 unsigned char SX1278_RX(unsigned char *buf,unsigned int time,unsigned char *rssi)
 {
   	INT8U Len=0;
@@ -439,12 +448,12 @@ unsigned char SX1278_RX(unsigned char *buf,unsigned int time,unsigned char *rssi
 	return Len;									    //返回接收到的数据长度；未接收到有效数据时返回0
 }
 
-/**************************************************************
+/************************************************************************
 函数：unsigned char RF_Wait_PacketSent (unsigned int time)
 说明：等待数据发送完成，最多time毫秒。每隔1S喂狗。
 入参：time为等待的时间，单位毫秒
 出参：发送完成，返回1；超时未发送完成，返回0
-******************************************************************************/
+*************************************************************************/
 unsigned char RF_Wait_PacketSent (unsigned int time)
 {
     while(time--)
@@ -598,12 +607,12 @@ void RF_Rx_Cfg(void)
    SX1276LoRaSetRFFrequency();  //频率设置434M
 }
 
-/**************************************************************
+/************************************************************************
 函数：unsigned char SX1276LORA_INT(void)
 说明：初始化SX1278
 入参：无
 出参：成功返回1；失败返回0
-******************************************************************************/
+*************************************************************************/
 unsigned char SX1276LORA_INT(void)
 {
     unsigned char Version;
@@ -769,3 +778,5 @@ unsigned char SX1278_Interupt(void)
     SX1276WriteBuffer( REG_LR_IRQFLAGS, 0xff  );	//清零所有标志位，所有的DIOx口都会恢复低电平（注意！要写0xff，写0x00无用）
 	return 0;	//不是接收中断，返回0
 }
+
+/*end*/
