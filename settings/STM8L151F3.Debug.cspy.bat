@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "E:\GIT\TemperatureSensor-KaiGuanGui\settings\STM8L151F3.Debug.general.xcl" --backend -f "E:\GIT\TemperatureSensor-KaiGuanGui\settings\STM8L151F3.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "G:\杜颖成\方诚资料\x、归档_测温汇总\归档_开关柜自取电\4、开关柜四代\软件源码OK\开关柜自取电探头（慢启动）\settings\STM8L151F3.Debug.general.xcl" --backend -f "G:\杜颖成\方诚资料\x、归档_测温汇总\归档_开关柜自取电\4、开关柜四代\软件源码OK\开关柜自取电探头（慢启动）\settings\STM8L151F3.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "E:\GIT\TemperatureSensor-KaiGuanGui\settings\STM8L151F3.Debug.general.xcl" "--debug_file=%~1" --backend -f "E:\GIT\TemperatureSensor-KaiGuanGui\settings\STM8L151F3.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.0\common\bin\cspybat" -f "G:\杜颖成\方诚资料\x、归档_测温汇总\归档_开关柜自取电\4、开关柜四代\软件源码OK\开关柜自取电探头（慢启动）\settings\STM8L151F3.Debug.general.xcl" "--debug_file=%~1" --backend -f "G:\杜颖成\方诚资料\x、归档_测温汇总\归档_开关柜自取电\4、开关柜四代\软件源码OK\开关柜自取电探头（慢启动）\settings\STM8L151F3.Debug.driver.xcl" 
 
 @echo off 
 :end
